@@ -30,6 +30,7 @@ class QueueConsumer:
         try:
             response = self.subscriber.pull(self.subscription_path, max_messages=num_messages)
         except DeadlineExceeded:
+            print('End of messages')
             return
 
         while True:
@@ -50,8 +51,9 @@ class QueueConsumer:
                             )
 
                     except Exception as e:
-                        print('Error on "{}" - {}'.format(value, e.message))
+                        print('Error on "{}" - {}'.format(value, e))
                                        
                 response = self.subscriber.pull(self.subscription_path, max_messages=num_messages)
             except DeadlineExceeded:
+                print('End of messages')
                 break
