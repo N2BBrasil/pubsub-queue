@@ -10,6 +10,7 @@ class QueuePublisher:
             self.project_id,
             self.topic_name
         )
+        self.create_topic_if_not_exists()
 
         def callback(message_future):
             if message_future.exception(timeout=30):
@@ -24,10 +25,11 @@ class QueuePublisher:
         self.callback = callback
 
     def create_topic_if_not_exists(self):
-        for topic in publisher.list_topics(self.project_path):
+        project_path = self.publisher.project_path(self.project_id)
+        for topic in self.publisher.list_topics(project_path):
             if self.topic_path == topic.name:
                 return
-        publisher.create_topic(topic_path)
+        self.publisher.create_topic(self.topic_path)
 
     def publish(self, message_list):
         for message in message_list:
